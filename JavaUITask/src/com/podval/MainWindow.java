@@ -2,13 +2,15 @@ package com.podval;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainWindow {
 
     private JTable table;
     private ArrayList<Book> books;
-    private final Dimension WINDOW_SIZE = new Dimension(860, 370);;
+    private final Dimension WINDOW_SIZE = new Dimension(860, 370);
+    ;
     private JPanel btnPanel;
     private JPanel topPanel;
     private JFrame jfrm;
@@ -22,7 +24,7 @@ public class MainWindow {
     private ArrayList<JButton> topPanelBtns;
 
 
-    public MainWindow(){
+    public MainWindow() {
 
         books = new ArrayList<>();
 
@@ -39,7 +41,7 @@ public class MainWindow {
         jfrm.setVisible(true);
     }
 
-    private void initFrame(){
+    private void initFrame() {
         jfrm = new JFrame("JTableExample");
 
         jfrm.getContentPane().setLayout(new BorderLayout());
@@ -49,7 +51,7 @@ public class MainWindow {
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void initTablePanel(){
+    private void initTablePanel() {
 
         initScrollPaneTable();
 
@@ -62,22 +64,22 @@ public class MainWindow {
         jfrm.getContentPane().add(tablePanel, BorderLayout.CENTER);
     }
 
-    private void initTableSize(){
+    private void initTableSize() {
         int preferedTableHeight = (table.getRowHeight() * libraryTable.getRowCount());
-        int maxTableHeight = (int)(0.7 * WINDOW_SIZE.height);
+        int maxTableHeight = (int) (0.7 * WINDOW_SIZE.height);
 
         tableSize = new Dimension(jfrm.getWidth() - 100, preferedTableHeight < maxTableHeight ? preferedTableHeight : maxTableHeight);
         table.setPreferredScrollableViewportSize(tableSize);
         table.setSize(tableSize);
     }
 
-    private void initScrollPaneTable(){
+    private void initScrollPaneTable() {
         libraryTable = LibraryGenerator.generate(books);
         table = new JTable(libraryTable);
         jscrlp = new JScrollPane(table);
     }
 
-    private void initTopPanel(){
+    private void initTopPanel() {
 
         topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
@@ -87,7 +89,7 @@ public class MainWindow {
         jfrm.getContentPane().add(topPanel, BorderLayout.NORTH);
     }
 
-    private void initTopButtonsPanel(){
+    private void initTopButtonsPanel() {
 
         btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout());
@@ -97,13 +99,13 @@ public class MainWindow {
         initAddToTableBtn();
         initRemoveFromTableBtn();
 
-        for(JButton btn : topPanelBtns)
+        for (JButton btn : topPanelBtns)
             btnPanel.add(btn);
 
         topPanel.add(btnPanel, BorderLayout.EAST);
     }
 
-    private void initAddToTableBtn(){
+    private void initAddToTableBtn() {
 
         JButton btnAddToTable = new JButton("Add");
 
@@ -116,13 +118,13 @@ public class MainWindow {
         topPanelBtns.add(btnAddToTable);
     }
 
-    private void initRemoveFromTableBtn(){
+    private void initRemoveFromTableBtn() {
         JButton btnRemoveFromTable = new JButton("Remove");
 
         topPanelBtns.add(btnRemoveFromTable);
     }
 
-    private void initMenuBar(){
+    private void initMenuBar() {
 
         menuBar = new JMenuBar();
 
@@ -130,7 +132,7 @@ public class MainWindow {
 
         initMenuItems();
 
-        for(JMenuItem item : menuItems)
+        for (JMenuItem item : menuItems)
             menu.add(item);
 
         menuBar.add(menu);
@@ -138,7 +140,7 @@ public class MainWindow {
         jfrm.setJMenuBar(menuBar);
     }
 
-    private void initMenuItems(){
+    private void initMenuItems() {
 
         menuItems = new ArrayList<>();
 
@@ -147,14 +149,24 @@ public class MainWindow {
 
     }
 
-    private void initSaveMenuBtn(){
+    private void initSaveMenuBtn() {
 
         JMenuItem saveMenuBtn = new JMenuItem("Save...");
+
+        saveMenuBtn.addActionListener(e -> {
+            try {
+                libraryTable.saveToFile("library.json");
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+                JOptionPane.showMessageDialog(new JFrame(), "Cant save", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
 
         menuItems.add(saveMenuBtn);
     }
 
-    private void initOpenMenuBtn(){
+    private void initOpenMenuBtn() {
 
         JMenuItem openMenuBtn = new JMenuItem("Open...");
 

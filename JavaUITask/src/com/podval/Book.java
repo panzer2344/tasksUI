@@ -50,6 +50,12 @@ public class Book {
         this.author = author;
     }
 
+    public void setAuthor(String string){
+        String[] splited = string.split(" ");
+
+        this.author = new Author(splited[0], splited[1]);
+    }
+
     public Genre getGenre() {
         return genre;
     }
@@ -58,7 +64,7 @@ public class Book {
         this.genre = genre;
     }
 
-    public void setGenre(String string){
+    public void setGenre(String string) {
         this.genre = Genre.fromString(string);
     }
 
@@ -70,63 +76,109 @@ public class Book {
         this.cost = cost;
     }
 
-    public boolean isValidTitle(String string){
+    public void setCost(String string){
+        this.cost = Integer.parseInt(string);
+    }
+
+    public boolean isValidTitle(String string) {
         return !string.matches("[\\x00-\\x1F\\x7F]");
     }
 
-    public boolean isValidAuthor(){
-        return true;
+    public boolean isValidAuthor(String string) {
+        String[] splitStr = string.split(" ");
+
+        if (splitStr.length != 2)
+            return false;
+
+        return splitStr[0].matches("^[a-zA-Z]*$") && !splitStr[0].matches("[\\x00-\\x1F\\x7F]") &&
+                splitStr[1].matches("^[a-zA-Z]*$") && !splitStr[1].matches("[\\x00-\\x1F\\x7F]");
     }
 
-    public boolean isValidGenre(){
+    public boolean isValidGenre(String string) {
+
+        try {
+            Genre.fromString(string);
+        } catch (IllegalArgumentException iae) {
+            iae.printStackTrace();
+            return false;
+        }
+
         return true;
+
     }
 
-    public boolean isValidCost(){
+    public boolean isValidCost(String string) {
+
+        try {
+            if (Integer.parseInt(string) < 0) {
+                return false;
+            }
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            return false;
+        }
+
         return true;
+
     }
 
-    public static Field getFieldByName(String fName){
+    public static Field getFieldByName(String fName) {
         try {
             return Book.class.getDeclaredField(fName);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return null;
     }
 
-    public static Field getFieldById(int id){
-        try{
+    public static Field getFieldById(int id) {
+        try {
             return Book.class.getDeclaredFields()[id];
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return null;
     }
 
-    public static int getFieldsNumber(){
+    public static int getFieldsNumber() {
         return Book.class.getDeclaredFields().length;
     }
 
     public void setFieldById(int id, Object object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if(id > 0 && id < Book.getFieldsNumber()) {
+        if (id >= 0 && id < Book.getFieldsNumber()) {
 
             String fieldName = this.getClass().getDeclaredFields()[id].getName();
-            String methodName = "set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+            String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
             Method method = this.getClass().getMethod(methodName, object.getClass());
 
             method.invoke(this, object);
-        }
-        else{
+        } else {
             throw new NoSuchMethodException();
         }
     }
 
-    public static Class getTypeOfFieldById(int id){
+    public static Class getTypeOfFieldById(int id)  {
         return Book.getFieldById(id).getClass();
+    }
+
+    public boolean isValidInput(int id, Object object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        if (id >= 0 && id < Book.getFieldsNumber()) {
+
+            String fieldName = this.getClass().getDeclaredFields()[id].getName();
+            String methodName = "isValid" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+
+            Method method = this.getClass().getMethod(methodName, object.getClass());
+
+            return (boolean)method.invoke(this, object);
+
+        } else {
+            throw new NoSuchMethodException();
+        }
+
     }
 
 

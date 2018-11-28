@@ -1,7 +1,14 @@
 package com.podval;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -56,14 +63,13 @@ public class LibraryTable extends AbstractTableModel {
         return true;
     }
 
-    private boolean isValidCellInput(Object aValue, int row, int col){
-        if( Book.getTypeOfFieldById(col) == aValue.getClass() ) {
+    private boolean isValidCellInput(Object aValue, int row, int col) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
-        }
+        return books.get(row).isValidInput(col, aValue);
     }
 
-    private void showError(JFrame frame){
-        JOptionPane.showMessageDialog(frame, "Error with finding handling method", "Dialog", JOptionPane.ERROR_MESSAGE);
+    private void showError(JFrame frame, String message){
+        JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
@@ -74,28 +80,43 @@ public class LibraryTable extends AbstractTableModel {
         Book book = books.get(rowIndex);
 
         try {
-            book.setFieldById(columnIndex, aValue);
+            if(isValidCellInput(aValue, rowIndex, columnIndex)) {
+                book.setFieldById(columnIndex, aValue);
+            }
+            else{
+                showError(errorFrame, "Not valid input");
+            }
         }
         catch (NoSuchMethodException nsme){
             nsme.printStackTrace();
-            showError(errorFrame);
+            showError(errorFrame, "Error with finding handling method");
         }
         catch (InvocationTargetException ite){
             ite.printStackTrace();
-            showError(errorFrame);
+            showError(errorFrame, "Error with finding handling method");
         }
         catch (IllegalAccessException iae){
             iae.printStackTrace();
-            showError(errorFrame);
+            showError(errorFrame, "Error with finding handling method");
         }
     }
 
-    public void saveToFile(String fileName){
+    public void saveToFile(String fileName) throws IOException {
 
+        Gson gson = new Gson();
+
+        System.out.println("gson created");
+
+        gson.toJson(books, new FileWriter(fileName));
+        //gson.toJson(books, new FileWriter("library.json"));
     }
 
-    public void readFromFile(String fileName){
+    public void readFromFile(String fileName) throws FileNotFoundException {
 
+        Gson gson = new Gson();
+
+        books = gson.fromJson(new FileReader(fileName), new TypeToken<ArrayList<Book>>(){}.getType());
+        //books = gson.fromJson(new FileReader("library.json"), books.getClass());
     }
 
 }

@@ -4,7 +4,7 @@ public enum Genre {
     FANTASY("Fantasy"),
     SCIENCE_FICTION("Science fiction"),
     MANUAL("Manual"),
-    ARTISCTIC_LITERATURE("Artistic literature"),
+    ARTISTIC_LITERATURE("Artistic literature"),
     UNKNOWN("Unknown");
 
 
