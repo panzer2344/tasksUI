@@ -1,12 +1,15 @@
 package com.podval;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.function.Consumer;
 
 public class MainWindow {
@@ -81,6 +84,17 @@ public class MainWindow {
         libraryTable = LibraryGenerator.generate(books);
         table = new JTable(libraryTable);
         jscrlp = new JScrollPane(table);
+
+        initTableCellEditors(table);
+    }
+
+    private void initTableCellEditors(JTable table){
+        for(int i = 0; i < table.getColumnCount(); i++){
+
+
+            table.getColumnModel().getColumn(i).setCellEditor();
+
+        }
     }
 
     private void initTopPanel() {

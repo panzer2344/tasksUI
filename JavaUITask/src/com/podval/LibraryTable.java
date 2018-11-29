@@ -1,8 +1,6 @@
 package com.podval;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,6 +9,7 @@ import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,11 +19,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LibraryTable extends AbstractTableModel {
 
@@ -167,13 +169,12 @@ public class LibraryTable extends AbstractTableModel {
 
     public void readFromFile(String fileName) throws FileNotFoundException {
         Document dom;
-        // Make an  instance of the DocumentBuilderFactory
+
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
-            // use the factory to take an instance of the document builder
+
             DocumentBuilder db = dbf.newDocumentBuilder();
-            // parse using the builder to get the DOM mapping of the
-            // XML file
+
             dom = db.parse(fileName);
 
             Element doc = dom.getDocumentElement();
@@ -211,28 +212,6 @@ public class LibraryTable extends AbstractTableModel {
                 books.add(newBook);
             }
 
-            /*role1 = getTextValue(role1, doc, "role1");
-            if (role1 != null) {
-                if (!role1.isEmpty())
-                    rolev.add(role1);
-            }
-            role2 = getTextValue(role2, doc, "role2");
-            if (role2 != null) {
-                if (!role2.isEmpty())
-                    rolev.add(role2);
-            }
-            role3 = getTextValue(role3, doc, "role3");
-            if (role3 != null) {
-                if (!role3.isEmpty())
-                    rolev.add(role3);
-            }
-            role4 = getTextValue(role4, doc, "role4");
-            if ( role4 != null) {
-                if (!role4.isEmpty())
-                    rolev.add(role4);
-            }
-            return true;*/
-
         } catch (ParserConfigurationException pce) {
             System.out.println(pce.getMessage());
         } catch (SAXException se) {
@@ -242,4 +221,6 @@ public class LibraryTable extends AbstractTableModel {
         }
 
     }
+
+
 }

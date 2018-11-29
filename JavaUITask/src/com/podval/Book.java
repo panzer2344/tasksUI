@@ -177,7 +177,7 @@ public class Book {
     }
 
     public static Class getTypeOfFieldById(int id)  {
-        return Book.getFieldById(id).getClass();
+        return Book.getFieldById(id).getType();
     }
 
     public boolean isValidInput(int id, Object object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
