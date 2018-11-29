@@ -53,7 +53,7 @@ public class Book {
         this.author = author;
     }
 
-    public void setAuthor(String string){
+    public void setAuthor(String string) {
         String[] splited = string.split(" ");
 
         this.author = new Author(splited[0], splited[1]);
@@ -79,22 +79,35 @@ public class Book {
         this.cost = cost;
     }
 
-    public void setCost(String string){
+    public void setCost(String string) {
         this.cost = Integer.parseInt(string);
     }
 
     public boolean isValidTitle(String string) {
-        return !string.matches("[\\x00-\\x1F\\x7F]");
+
+        if ("".equals(string))
+            return false;
+
+        return string.matches("^[а-яА-Яa-z\\sA-Z\\-0-9]*$");
     }
 
     public boolean isValidAuthor(String string) {
+
         String[] splitStr = string.split(" ");
 
         if (splitStr.length != 2)
             return false;
 
-        return splitStr[0].matches("^[a-zA-Z]*$") && !splitStr[0].matches("[\\x00-\\x1F\\x7F]") &&
-                splitStr[1].matches("^[a-zA-Z]*$") && !splitStr[1].matches("[\\x00-\\x1F\\x7F]");
+        if ("".equals(splitStr[0])) {
+            return false;
+        } else {
+            if ("".equals(splitStr[1])) {
+                return false;
+            }
+        }
+
+        return splitStr[0].matches("^[а-яА-Яa-z\\sA-Z\\-]*$") &&
+                splitStr[1].matches("^[а-яА-Яa-z\\sA-Z\\-]*$");
     }
 
     public boolean isValidGenre(String string) {
@@ -123,6 +136,22 @@ public class Book {
 
         return true;
 
+    }
+
+    public String titleInputHelp() {
+        return "Title must be a not empty string of letters and numbers";
+    }
+
+    public String authorInputHelp() {
+        return "Author field must be a not empty string of two words of letters";
+    }
+
+    public String GenreInputHelp() {
+        return "Genre must be equal to one of genre combobox elements";
+    }
+
+    public String costInputHelp() {
+        return "Cost must be an integer number greater than zero";
     }
 
     public static Field getFieldByName(String fName) {
@@ -176,7 +205,7 @@ public class Book {
         }
     }
 
-    public static Class getTypeOfFieldById(int id)  {
+    public static Class getTypeOfFieldById(int id) {
         return Book.getFieldById(id).getType();
     }
 
@@ -185,11 +214,11 @@ public class Book {
         if (id >= 0 && id < Book.getFieldsNumber()) {
 
             String fieldName = this.getClass().getDeclaredFields()[id].getName();
-            String methodName = "isValid" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+            String methodName = "isValid" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
             Method method = this.getClass().getMethod(methodName, object.getClass());
 
-            return (boolean)method.invoke(this, object);
+            return (boolean) method.invoke(this, object);
 
         } else {
             throw new NoSuchMethodException();
@@ -197,14 +226,44 @@ public class Book {
 
     }
 
-    private void addXmlParameter(Document doc, Element bookNode, String name, String value){
+    public String getFieldValueById(int id) throws NoSuchMethodException{
+
+        Object result = null;
+
+        if (id >= 0 && id < Book.getFieldsNumber()) {
+
+            String fieldName = this.getClass().getDeclaredFields()[id].getName();
+            String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+
+            Method method = null;
+            try {
+                method = this.getClass().getMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                result = method.invoke(this);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new NoSuchMethodException();
+        }
+
+        return result.toString();
+    }
+
+    private void addXmlParameter(Document doc, Element bookNode, String name, String value) {
         Element parameter = doc.createElement(name);
         Text textValue = doc.createTextNode(value);
         parameter.appendChild(textValue);
         bookNode.appendChild(parameter);
     }
 
-    public Element toXmlNode(Document doc, int number){
+    public Element toXmlNode(Document doc, int number) {
 
         Text textValue = null;
         Element parameter = null;
@@ -233,7 +292,7 @@ public class Book {
 
         NodeList childNodes = bookNode.getChildNodes();
 
-        for(int i = 1; i < childNodes.getLength(); i += 2) {
+        for (int i = 1; i < childNodes.getLength(); i += 2) {
 
             Node currentNode = childNodes.item(i);
             String fieldName = currentNode.getNodeName();
@@ -246,5 +305,35 @@ public class Book {
         return this;
     }
 
+
+    public String inputHelpByFieldId(int id) {
+
+        String result = "";
+
+        String fieldName = this.getClass().getDeclaredFields()[id].getName();
+        String methodName = fieldName + "InputHelp";
+
+        Method method = null;
+        try {
+
+            method = this.getClass().getMethod(methodName);
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            result = (String) method.invoke(this);
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
 
 }

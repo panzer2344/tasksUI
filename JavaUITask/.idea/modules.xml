@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaUITask.iml" filepath="$PROJECT_DIR$/JavaUITask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/JavaUITask.iml" filepath="$PROJECT_DIR$/.idea/JavaUITask.iml" />
     </modules>
   </component>
 </project>
