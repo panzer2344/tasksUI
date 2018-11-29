@@ -2,8 +2,12 @@ package com.podval;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class MainWindow {
 
@@ -110,6 +114,9 @@ public class MainWindow {
         JButton btnAddToTable = new JButton("Add");
 
         btnAddToTable.addActionListener(e -> {
+
+            NewRowFrame nrf = new NewRowFrame();
+
             books.add(new Book("newBook"));
             libraryTable.fireTableDataChanged();
         });
@@ -149,19 +156,61 @@ public class MainWindow {
 
     }
 
+    private String fileNameFromDialog(){
+
+        String fileName = null;
+
+        File currentDirFile = new File(".");
+        String helper = currentDirFile.getAbsolutePath();
+        String currentDir = helper.substring(0, helper.length() - currentDirFile.getName().length());
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(currentDir));
+
+        int returnVal = fileChooser.showOpenDialog(jfrm);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+            fileName = fileChooser.getSelectedFile().getAbsolutePath();
+
+        return fileName;
+    }
+
+    private void saveFileAction(){
+
+        try {
+
+            libraryTable.saveToFile(fileNameFromDialog());
+
+        }  catch (IOException e) {
+
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(new JFrame(), "Cant save to file", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
+    private void readFileAction(){
+
+        try {
+
+            libraryTable.readFromFile(fileNameFromDialog());
+            libraryTable.fireTableDataChanged();
+
+        }  catch (IOException e) {
+
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(new JFrame(), "Cant read from file", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
     private void initSaveMenuBtn() {
 
         JMenuItem saveMenuBtn = new JMenuItem("Save...");
 
-        saveMenuBtn.addActionListener(e -> {
-            try {
-                libraryTable.saveToFile("library.json");
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-                JOptionPane.showMessageDialog(new JFrame(), "Cant save", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
+        saveMenuBtn.addActionListener(e -> saveFileAction());
 
         menuItems.add(saveMenuBtn);
     }
@@ -169,6 +218,8 @@ public class MainWindow {
     private void initOpenMenuBtn() {
 
         JMenuItem openMenuBtn = new JMenuItem("Open...");
+
+        openMenuBtn.addActionListener(e -> readFileAction() );
 
         menuItems.add(openMenuBtn);
     }

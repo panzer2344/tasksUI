@@ -1,6 +1,9 @@
 package com.podval;
 
 
+import org.w3c.dom.*;
+
+import javax.print.Doc;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -160,6 +163,19 @@ public class Book {
         }
     }
 
+    public void setFieldByName(String fieldName, Object object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (fieldName != null && !fieldName.equals("")) {
+
+            String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+
+            Method method = this.getClass().getMethod(methodName, object.getClass());
+
+            method.invoke(this, object);
+        } else {
+            throw new NoSuchMethodException();
+        }
+    }
+
     public static Class getTypeOfFieldById(int id)  {
         return Book.getFieldById(id).getClass();
     }
@@ -179,6 +195,55 @@ public class Book {
             throw new NoSuchMethodException();
         }
 
+    }
+
+    private void addXmlParameter(Document doc, Element bookNode, String name, String value){
+        Element parameter = doc.createElement(name);
+        Text textValue = doc.createTextNode(value);
+        parameter.appendChild(textValue);
+        bookNode.appendChild(parameter);
+    }
+
+    public Element toXmlNode(Document doc, int number){
+
+        Text textValue = null;
+        Element parameter = null;
+
+        // book
+        Element bookNode = doc.createElement("book");
+        bookNode.setAttribute("number", "" + number);
+
+        // title
+        addXmlParameter(doc, bookNode, "title", this.title);
+
+        // author
+        addXmlParameter(doc, bookNode, "author", this.author.toString());
+
+        //genre
+        addXmlParameter(doc, bookNode, "genre", this.genre.toString());
+
+        //cost
+        addXmlParameter(doc, bookNode, "cost", this.cost.toString());
+
+        return bookNode;
+
+    }
+
+    public Book fromXmlNode(Element dom, Node bookNode) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
+        NodeList childNodes = bookNode.getChildNodes();
+
+        for(int i = 1; i < childNodes.getLength(); i += 2) {
+
+            Node currentNode = childNodes.item(i);
+            String fieldName = currentNode.getNodeName();
+            String fieldValue = currentNode.getTextContent();
+
+            this.setFieldByName(fieldName, fieldValue);
+
+        }
+
+        return this;
     }
 
 
