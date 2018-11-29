@@ -197,16 +197,26 @@ public class MainWindow {
 
             int rowNum = table.getSelectedRow();
 
-            int answer = JOptionPane.showConfirmDialog(
-                    jfrm,
-                    "Are you sure you want to remove this row? ",
-                    "Removing",
-                    JOptionPane.YES_NO_OPTION);
+            if(rowNum > -1) {
 
-            if(answer == JOptionPane.YES_OPTION) {
+                int answer = JOptionPane.showConfirmDialog(
+                        jfrm,
+                        "Are you sure you want to remove this row? ",
+                        "Removing",
+                        JOptionPane.YES_NO_OPTION);
 
-                books.remove(rowNum);
-                libraryTable.fireTableDataChanged();
+                if (answer == JOptionPane.YES_OPTION) {
+
+                    table.requestFocus();
+                    table.editCellAt(rowNum == 0 ? rowNum+1 : rowNum - 1, 0);
+
+                    books.remove(rowNum);
+                    libraryTable.fireTableDataChanged();
+
+                }
+            }else{
+
+                JOptionPane.showMessageDialog(jfrm, "Choose row before pushing remove button", "Nothing to remove", JOptionPane.WARNING_MESSAGE);
 
             }
 
