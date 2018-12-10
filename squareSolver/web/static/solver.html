@@ -1,0 +1,67 @@
+
+
+<head>
+
+    <link rel="stylesheet" href="styles/solver.css">
+
+</head>
+
+
+<body>
+
+
+<div id="solver">
+
+
+    <div id="header">
+
+        <h1> Square equation solver </h1>
+
+    </div>
+
+    <div id="solverInput">
+
+        <form name="solverInputForm" method="post">
+
+            <input class="inputCoeffs" type="text" name="squareCoeff"/>
+
+            x<sup>2</sup> +
+
+            <input class="inputCoeffs" type="text" name="linearCoeff"/>
+
+            x +
+
+            <input class="inputCoeffs" type="text" name="freeCoeff"/>
+
+            = 0
+
+            <input id="submitSolver" type="submit" value="solve">
+
+
+        </form>
+
+    </div>
+
+
+
+
+    <div id="answers">
+
+        <div id="firstAnswer">
+
+            x1 = <label id="x1Answer"> ... </label>
+
+        </div>
+
+        <div id="secondAnswer">
+
+            x2 = <label id="x2Answer"> ... </label>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
