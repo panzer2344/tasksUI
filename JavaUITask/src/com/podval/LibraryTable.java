@@ -86,6 +86,10 @@ public class LibraryTable extends AbstractTableModel {
         JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    private void showWarning(JFrame frame, String message){
+        JOptionPane.showMessageDialog(frame, message, "Warning", JOptionPane.WARNING_MESSAGE);
+    }
+
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 
@@ -95,23 +99,47 @@ public class LibraryTable extends AbstractTableModel {
 
         try {
             if(isValidCellInput(aValue, rowIndex, columnIndex)) {
-                book.setFieldById(columnIndex, aValue);
+
+                int answer = JOptionPane.showConfirmDialog(
+                        errorFrame,
+                        "Are you sure you want to change this field? ",
+                        "Removing",
+                        JOptionPane.YES_NO_OPTION);
+
+                if(answer == JOptionPane.YES_OPTION) {
+
+                    book.setFieldById(columnIndex, aValue);
+
+                }else{
+                    if("".equals(book.getFieldValueById(columnIndex))){
+                        books.remove(rowIndex);
+                        fireTableDataChanged();
+                    }
+                }
+
             }
             else{
-                showError(errorFrame, "Not valid input");
+                if("".equals(book.getTitle())){
+                    books.remove(rowIndex);
+                    showWarning(errorFrame, "Not valid input: " + book.inputHelpByFieldId(columnIndex));
+                    fireTableDataChanged();
+                }
+                else {
+                    showWarning(errorFrame, "Not valid input: " + book.inputHelpByFieldId(columnIndex));
+                }
             }
         }
         catch (NoSuchMethodException nsme){
             nsme.printStackTrace();
-            showError(errorFrame, "Error with finding handling method");
+            showError(errorFrame, "Error with finding handling method(NoSuchMethodException)");
         }
         catch (InvocationTargetException ite){
             ite.printStackTrace();
-            showError(errorFrame, "Error with finding handling method");
+            showError(errorFrame, "Error with finding handling method(InvocationTargetException)");
         }
         catch (IllegalAccessException iae){
             iae.printStackTrace();
-            showError(errorFrame, "Error with finding handling method");
+            showError(errorFrame, "Error with finding handling method(IllegalAccessException)");
         }
     }
 
@@ -195,17 +223,17 @@ public class LibraryTable extends AbstractTableModel {
                 } catch (NoSuchMethodException e) {
 
                     e.printStackTrace();
-                    showError(new JFrame(), "cant read this file");
+                    showError(new JFrame(), "cant read this file(NoSuchMethodException)");
 
                 } catch (IllegalAccessException e) {
 
                     e.printStackTrace();
-                    showError(new JFrame(), "cant read this file");
+                    showError(new JFrame(), "cant read this file(IllegalAccessException)");
 
                 } catch (InvocationTargetException e) {
 
                     e.printStackTrace();
-                    showError(new JFrame(), "cant read this file");
+                    showError(new JFrame(), "cant read this file(InvocationTargetException)");
 
                 }
 
@@ -213,11 +241,20 @@ public class LibraryTable extends AbstractTableModel {
             }
 
         } catch (ParserConfigurationException pce) {
+
+            pce.printStackTrace();
             System.out.println(pce.getMessage());
+
         } catch (SAXException se) {
+
+            se.printStackTrace();
             System.out.println(se.getMessage());
+
         } catch (IOException ioe) {
+
+            ioe.printStackTrace();
             System.err.println(ioe.getMessage());
+
         }
 
     }
