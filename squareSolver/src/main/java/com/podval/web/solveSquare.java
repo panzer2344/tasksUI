@@ -1,6 +1,8 @@
 package com.podval.web;
 
 
+import com.google.gson.Gson;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,57 +13,101 @@ import java.io.PrintWriter;
 public class solveSquare extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        Gson gson = new Gson();
 
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
+        SquareEquation equation = new SquareEquation(
+                Double.parseDouble(req.getParameter("squareCoeff")),
+                Double.parseDouble(req.getParameter("linearCoeff")),
+                Double.parseDouble(req.getParameter("freeCoeff"))
+        );
 
-        // do some processing here...
+        Solution solution = new Solution(equation.getSquareCoeff(), equation.getLinearCoeff());
 
-        // get response writer
-        PrintWriter writer = resp.getWriter();
+        resp.getWriter().write(gson.toJson(solution));
+        resp.getWriter().flush();
 
-        // build HTML code
-        String htmlRespone = "<html>";
-        htmlRespone += "<h2>Your username is: " + username + "<br/>";
-        htmlRespone += "Your password is: " + password + "</h2>";
-        htmlRespone += "</html>";
+    }
 
-        // return response
-        writer.println(htmlRespone);
+}
 
-        //req.getRequestDispatcher("/solveSquare.jsp").forward(req, resp);
+class SquareEquation{
 
+    private double squareCoeff;
+    private double linearCoeff;
+    private double freeCoeff;
+
+    public SquareEquation(double squareCoeff, double linearCoeff, double freeCoeff) {
+        this.squareCoeff = squareCoeff;
+        this.linearCoeff = linearCoeff;
+        this.freeCoeff = freeCoeff;
+    }
+
+    public double getSquareCoeff() {
+        return squareCoeff;
+    }
+
+    public void setSquareCoeff(double squareCoeff) {
+        this.squareCoeff = squareCoeff;
+    }
+
+    public double getLinearCoeff() {
+        return linearCoeff;
+    }
+
+    public void setLinearCoeff(double linearCoeff) {
+        this.linearCoeff = linearCoeff;
+    }
+
+    public double getFreeCoeff() {
+        return freeCoeff;
+    }
+
+    public void setFreeCoeff(double freeCoeff) {
+        this.freeCoeff = freeCoeff;
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String toString() {
+        return "SquareEquation{" +
+                "squareCoeff=" + squareCoeff +
+                ", linearCoeff=" + linearCoeff +
+                ", freeCoeff=" + freeCoeff +
+                '}';
+    }
+}
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+class Solution{
+    private double x1;
+    private double x2;
 
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
-
-        // do some processing here...
-
-        // get response writer
-        PrintWriter writer = resp.getWriter();
-
-        // build HTML code
-        String htmlRespone = "<html>";
-        htmlRespone += "<h2>Your username is: " + username + "<br/>";
-        htmlRespone += "Your password is: " + password + "</h2>";
-        htmlRespone += "</html>";
-
-        // return response
-        writer.println(htmlRespone);
-
-        //req.getRequestDispatcher("/solveSquare.jsp").forward(req, resp);
-
+    Solution(double x1, double x2){
+        this.x1 = x1;
+        this.x2 = x2;
     }
 
+    public double getX1() {
+        return x1;
+    }
+
+    public void setX1(double x1) {
+        this.x1 = x1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    public void setX2(double x2) {
+        this.x2 = x2;
+    }
+
+    @Override
+    public String toString() {
+        return "Solution{" +
+                "x1=" + x1 +
+                ", x2=" + x2 +
+                '}';
+    }
 }

@@ -26,6 +26,9 @@ div#solver{
     border-radius: 10px 10px 10px 10px;
     width: 70%;
     margin-top: 10%;
+    background: linear-gradient( #b3e7ff, #e6f7ff, #ccefff);
+    min-height: 350px;
+    min-width: 400px;
 }
 
 div#header{
@@ -51,7 +54,7 @@ div#solverInput input.inputCoeffs {
     width: 7%;
     font-size: 14pt;
     line-height: 35px;
-    height: 70px;
+    height: 5%;
     text-align: center;
     padding: 10px;
     background: transparent;
@@ -73,12 +76,18 @@ div#solverInput #submitSolver {
     transition: 0.2s;
 }
 
+div#solverInput #submitSolver:active {
+
+    background: #E38916;
+
+}
+
 div#header {
     margin-bottom: 0%;
     height: 15%;
     padding-right: 10%;
 
-    background: linear-gradient( #b3e7ff, #e6f7ff);
+    /*background: linear-gradient( #b3e7ff, #e6f7ff);*/
 }
 
 div#header h1{
@@ -88,12 +97,12 @@ div#header h1{
 div#solverInput {
     height: 15%;
     margin-top: 0%;
-    background: linear-gradient( #e6f7ff, #ccefff);
+    /*background: linear-gradient( #e6f7ff, #ccefff);*/
 }
 
 div#answers{
     margin-top: 0%;
-    background-color: #ccefff;
+    /*background-color: #ccefff;*/
     padding-right: 10%;
 }
 

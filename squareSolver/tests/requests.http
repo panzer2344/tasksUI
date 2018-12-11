@@ -1,0 +1,11 @@
+
+POST http://localhost:8080/solveSquare
+Content-Type: application/json
+
+{
+  "squareCoeff": "12",
+  "linearCoeff": "12",
+  "freeCoeff": "12"
+}
+
+###
