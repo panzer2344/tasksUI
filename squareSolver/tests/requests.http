@@ -3,9 +3,9 @@ POST http://localhost:8080/solveSquare
 Content-Type: application/json
 
 {
-  "squareCoeff": "12",
+  "squareCoeff": "0",
   "linearCoeff": "12",
-  "freeCoeff": "12"
+  "freeCoeff": "-12"
 }
 
 ###
