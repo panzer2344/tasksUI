@@ -25,28 +25,38 @@
 
     <div id="solverInput">
 
-        <form id="solverInputForm" >
+        <div id="inputs">
 
-            <input id="squareCoeff" class="inputCoeffs" type="number" name="squareCoeff"/>
+            <form id="solverInputForm" >
 
-            x<sup>2</sup> +
+                <input id="squareCoeff" class="inputCoeffs" type="number" name="squareCoeff"/>
 
-            <input id="linearCoeff" class="inputCoeffs" type="number" name="linearCoeff"/>
+                x<sup>2</sup> +
 
-            x +
+                <input id="linearCoeff" class="inputCoeffs" type="number" name="linearCoeff"/>
 
-            <input id="freeCoeff" class="inputCoeffs" type="number" name="freeCoeff"/>
+                x +
 
-            = 0
+                <input id="freeCoeff" class="inputCoeffs" type="number" name="freeCoeff"/>
+
+                = 0
 
 
-        </form>
+            </form>
 
-        <button id="submitSolver">solve</button>
+        </div>
+
+        <div id="submit">
+
+            <button id="submitSolver">solve</button>
+
+        </div>
+
 
     </div>
 
 
+    <br/>
 
 
     <div id="answers">
@@ -64,6 +74,16 @@
         </div>
 
     </div>
+
+    <br/>
+
+    <div id="errorBlock">
+
+        <label id="error"></label>
+
+    </div>
+
+    <br/>
 
 </div>
 

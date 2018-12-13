@@ -5,6 +5,7 @@ class SquareEquation{
     private double squareCoeff;
     private double linearCoeff;
     private double freeCoeff;
+    private String error;
 
     public SquareEquation(double squareCoeff, double linearCoeff, double freeCoeff) {
         this.squareCoeff = squareCoeff;

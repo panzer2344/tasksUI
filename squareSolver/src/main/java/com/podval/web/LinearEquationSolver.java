@@ -9,7 +9,11 @@ class LinearEquationSolver extends EquationSolver{
 
         double x = - equation.getFreeCoeff() / equation.getLinearCoeff();
 
-        solution = new Solution( x, x);
+        if(equation.getLinearCoeff() != 0) {
+            solution = new Solution(x, x);
+        } else {
+            solution = new Solution("Error: Bad data - const = zero");
+        }
 
         return (Solution) solution.clone();
 

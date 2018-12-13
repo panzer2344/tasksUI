@@ -8,9 +8,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-public class solveSquare extends HttpServlet {
+public class solveSquareServlet extends HttpServlet {
+
+    protected boolean isValid(StringBuilder sb, Gson gson){
+
+        Data data = gson.fromJson(sb.toString(), Data.class);
+
+        if("".equals(data.squareCoeff) || "".equals(data.linearCoeff) || "".equals(data.freeCoeff)) {
+
+            return false;
+
+        }else if(!data.squareCoeff.matches("(^[-]?\\d+$)") ||
+                !data.linearCoeff.matches("(^[-]?\\d+$)") ||
+                !data.freeCoeff.matches("(^[-]?\\d+$)")
+        ) {
+
+            return false;
+
+        }
+
+        return true;
+
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -22,6 +42,14 @@ public class solveSquare extends HttpServlet {
             String s;
             while ((s = request.getReader().readLine()) != null) {
                 sb.append(s);
+            }
+
+            if(!isValid(sb, gson)){
+
+                response.getOutputStream().print(gson.toJson(new Solution("Error: Bad data!")));
+                response.getOutputStream().flush();
+                return;
+
             }
 
             SquareEquation equation = (SquareEquation) gson.fromJson(sb.toString(), SquareEquation.class);
@@ -37,7 +65,6 @@ public class solveSquare extends HttpServlet {
                 solver = new SquareEquationSolver(equation);
 
             }
-
 
             response.getOutputStream().print(gson.toJson(solver.solve()));
             response.getOutputStream().flush();

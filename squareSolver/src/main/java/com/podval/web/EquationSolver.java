@@ -13,4 +13,11 @@ abstract class EquationSolver{
 
     public abstract Solution solve();
 
+    public SquareEquation getEquation() {
+        return equation;
+    }
+
+    public Solution getSolution() {
+        return solution;
+    }
 }

@@ -20,7 +20,7 @@ class SquareEquationSolver extends EquationSolver{
 
         if(discriminant < 0){
 
-            solution = new Solution(Double.NaN, Double.NaN);
+            solution = new Solution("Error: Discriminant < 0");
 
         }else if(discriminant == 0){
 

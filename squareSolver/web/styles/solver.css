@@ -27,7 +27,7 @@ div#solver{
     width: 70%;
     margin-top: 10%;
     background: linear-gradient( #b3e7ff, #e6f7ff, #ccefff);
-    min-height: 350px;
+    /*min-height: 350px;*/
     min-width: 400px;
 }
 
@@ -51,14 +51,14 @@ div#answers {
 div#solverInput input.inputCoeffs {
     border: 0;
     border-bottom: 2px solid #1976D2;
-    width: 7%;
+    width: 10%;
     font-size: 14pt;
     line-height: 35px;
     height: 5%;
     text-align: center;
     padding: 10px;
     background: transparent;
-    color: #BBDEFB;
+    color: #0040ff;
 }
 
 
@@ -66,7 +66,7 @@ div#solverInput #submitSolver {
     display: inline-block;
     color: white;
     text-decoration: none;
-    padding: .5em 2em;
+    /*padding: .5em 2em;*/
     outline: none;
     border-width: 2px 0;
     border-style: solid none;
@@ -84,8 +84,9 @@ div#solverInput #submitSolver:active {
 
 div#header {
     margin-bottom: 0%;
-    height: 15%;
-    padding-right: 10%;
+    /*height: 15%;*/
+    width: 35%;
+    /*padding-right: 10%;*/
 
     /*background: linear-gradient( #b3e7ff, #e6f7ff);*/
 }
@@ -95,15 +96,16 @@ div#header h1{
 }
 
 div#solverInput {
-    height: 15%;
-    margin-top: 0%;
+    height: 10%;
+    margin-top: 2%;
     /*background: linear-gradient( #e6f7ff, #ccefff);*/
 }
 
 div#answers{
-    margin-top: 0%;
+    position: relative;
+    margin-top: 0px;
     /*background-color: #ccefff;*/
-    padding-right: 10%;
+    /*padding-right: 10%;*/
 }
 
 input::-webkit-outer-spin-button,
@@ -113,3 +115,14 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+div#solverInput #submit{
+
+    margin-left: -7%;
+
+}
+
+#error {
+
+    color: red;
+
+}
